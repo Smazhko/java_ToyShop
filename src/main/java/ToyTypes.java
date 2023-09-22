@@ -1,6 +1,6 @@
 public enum ToyTypes {
     CARMODEL ("CarModel"),
-    CHILDRENSDESIGNER("ChildrensDesigner"),
+    CHILDRENDESIGNER("ChildrenDesigner"),
     DOLL("Doll"),
     ROBOT("Robot");
 

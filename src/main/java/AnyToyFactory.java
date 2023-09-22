@@ -1,56 +1,23 @@
-import java.util.*;
-
 public class AnyToyFactory{
+    private NameGenerator nameGen = new NameGenerator();
 
     public AnyToyFactory() {
     }
-    private ArrayList<String> carNames = new ArrayList<>(Arrays.asList(
-                "Porsche",
-                "BMW",
-                "Lincoln",
-                "Maserati",
-                "Mercedes"));
-    private ArrayList<String> cdNames = new ArrayList<>(Arrays.asList(
-                "Bondibon",
-                "Magformers",
-                "LEGO",
-                "Bauer",
-                "1TOY"));
-    private ArrayList<String> dollNames = new ArrayList<>(Arrays.asList(
-            "Superman",
-            "Barbie",
-            "Joker",
-            "Dark Elf",
-            "Disney's Elsa"));
-    private ArrayList<String> roboNames = new ArrayList<>(Arrays.asList(
-                "Bumblebee",
-                "Waltron",
-                "Smart RoboDog",
-                "RoboSpider",
-                "Iron Man"));
 
     public Toy createCarModel(Integer count){
-        return new CarModel(choseToyName(carNames), count);
+        return new CarModel(nameGen.create(ToyTypes.CARMODEL.toString()), count);
     }
 
-    public Toy createChildrensDesigner(Integer count){
-        return new ChildrensDesigner(choseToyName(cdNames), count);
+    public Toy createChildrenDesigner(Integer count){
+        return new ChildrenDesigner(nameGen.create(ToyTypes.CHILDRENDESIGNER.toString()), count);
     }
 
     public Toy createDoll(Integer count){
-        return new Doll(choseToyName(dollNames), count);
+        return new Doll(nameGen.create(ToyTypes.DOLL.toString()), count);
     }
 
     public Toy createRobot(Integer count){
-        return new Robot(choseToyName(roboNames), count);
+        return new Robot(nameGen.create(ToyTypes.ROBOT.toString()), count);
     }
 
-    private String choseToyName(ArrayList<String> names){
-        int nameIndex = new Random().nextInt(names.size());
-        String currentName = names.get(nameIndex);
-        if (names.size() > 1){
-            names.remove(nameIndex);
-        }
-        return currentName;
-    }
 }

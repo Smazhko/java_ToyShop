@@ -36,7 +36,7 @@ public class Main {
         // с указанием шанса выпадения каждого из классов
         Map<String, Integer> raffleClassList = new HashMap<>();
         raffleClassList.put(ToyTypes.CARMODEL.toString(), 10);
-        raffleClassList.put(ToyTypes.CHILDRENSDESIGNER.toString(), 20);
+        raffleClassList.put(ToyTypes.CHILDRENDESIGNER.toString(), 20);
         raffleClassList.put(ToyTypes.DOLL.toString(), 50);
         raffleClassList.put(ToyTypes.ROBOT.toString(), 20);
 
@@ -48,8 +48,8 @@ public class Main {
         ToyShop shop = new ToyShop(raffleClassList);
         shop.addToy(toyFactory.createCarModel(2));
         shop.addToy(toyFactory.createCarModel(2));
-        shop.addToy(toyFactory.createChildrensDesigner(1));
-        shop.addToy(toyFactory.createChildrensDesigner(2));
+        shop.addToy(toyFactory.createChildrenDesigner(1));
+        shop.addToy(toyFactory.createChildrenDesigner(2));
         shop.addToy(toyFactory.createDoll(5));
         shop.addToy(toyFactory.createDoll(3));
         shop.addToy(toyFactory.createDoll(2));
