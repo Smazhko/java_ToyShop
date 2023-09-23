@@ -1,8 +1,3 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ToyShop {
@@ -15,12 +10,13 @@ public class ToyShop {
     // игрушки на складе. Приз в каждой строчке очереди подразумевается
     // только ОДИН, поэтому ссылки (но не создания нового объекта)
     // достоточно.
-    private File dataFile = new File("ToyLottery.txt"); // имя файла для хранения ИНФО о розыгрыше лотереи
+    private Logger logger = new Logger();
 
 
     /**
      * КОНСТРУКТОР МАГАЗИНА<br>
-     * с приёмом внешних данных инициализируются внутренние переменные и создаётся новый файл ЛОГа
+     * с приёмом внешних данных инициализируются внутренние переменные
+     * за создание и ведение лог-файла отвечает класс LOGGER - происходит его инициализация
      *
      * @param raffleClassList список разыгрываемых в лотерее классов игрушек
      */
@@ -28,23 +24,19 @@ public class ToyShop {
         this.warehouse = new HashMap<>();
         this.raffleToyTypesList = raffleClassList;
         this.prizesQueue = new ArrayDeque<>();
-        // обновляем файл: если был создан - удаляем
-        if (dataFile.exists()) {
-            dataFile.delete();
-        } else {
-            try {
-                dataFile.createNewFile();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-        // на случай, если в списке участвующих классов игрушек будут созданы записи
-        // с нулевыми или отицательными шансами - удаляем ненужные строки и работаем с остатком
+        typesListVerify();
+    }
+
+
+    // на случай, если в списке участвующих классов игрушек будут созданы записи
+    // с нулевыми или отицательными шансами - удаляем ненужные строки и работаем с остатком
+    private void typesListVerify(){
         Iterator<Map.Entry<String, Integer>> iterator = raffleToyTypesList.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Integer> pair = iterator.next();
             Integer chance = pair.getValue();
             if (chance < 1) {
+
                 iterator.remove();
             }
         }
@@ -79,8 +71,7 @@ public class ToyShop {
         String message = "";
         if (!warehouse.isEmpty()) {
             while (!raffleToyTypesList.isEmpty()) {
-                String raffleToyType = getToyTypeWithChance();
-                Toy raffledToy = getToyFromShop(raffleToyType);
+                Toy raffledToy = getToyFromShop(getToyTypeWithChance());
                 if (raffledToy != null) {
                     prizesQueue.offer(raffledToy);
                     System.out.println("       Разыграно: " + raffledToy + ", остаток " + raffledToy.getCount());
@@ -93,7 +84,7 @@ public class ToyShop {
             message = "( < ! > ) В магазине не осталось игрушек. Разыгрывать больше нечего (>.<)";
         }
         System.out.println(message);
-        // saveLogFile(message);
+        // logger.writeLogFile(message);
         return null;
     }
 
@@ -189,11 +180,11 @@ public class ToyShop {
             Toy prize = prizesQueue.poll();
             String message = "Выдан приз - " + prize;
             System.out.println(message);
-            saveLogFile(message);
+            logger.writeToLog(message);
         } else {
             String message = "Очередь выдачи пуста. Все разыгранные игрушки розданы призёрам.";
             System.out.println(message);
-            //saveLogFile(message);
+            //logger.writeLogFile(message);
         }
     }
 
@@ -204,25 +195,6 @@ public class ToyShop {
         }
     }
 
-
-    /**
-     * Сохранение данных о выдаче призов в файл (ЛОГ)
-     * @param raffleResults
-     */
-    private void saveLogFile(String raffleResults) {
-        if (dataFile.canWrite()) {
-            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy (EEE), HH:mm:ss:SSS");
-            try (FileWriter fwriter = new FileWriter(dataFile, true)) {
-                // доп параметр TRUE позволяет ДОПИСЫВАТЬ, а НЕ перезаписывать
-                fwriter.write("Время: " + dateFormat.format(new Date()) + "\n");
-                fwriter.write("     Событие: " + raffleResults + "\n");
-                fwriter.flush();
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-    }
 
     /**
      * ВЫВОД СОДЕРЖИМОГО МАГАЗИНА
