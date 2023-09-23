@@ -30,6 +30,7 @@ public class NameGenerator {
             "Iron Man")));
     }
 
+    // генерация неповторяющихся имён
     public String create(String toyType){
         ArrayList<String> toyNameList = names.get(toyType);
         int nameIndex = new Random().nextInt(toyNameList.size());

@@ -27,16 +27,17 @@ public class ToyShop {
         typesListVerify();
     }
 
-
-    // на случай, если в списке участвующих классов игрушек будут созданы записи
-    // с нулевыми или отицательными шансами - удаляем ненужные строки и работаем с остатком
+    /**
+     * ВЕРИФИКАЦИЯ СПИСКА ТИПОВ ИГРУШЕК ДЛЯ РОЗЫГРЫША<br>
+     * на случай, если в списке участвующих классов будут созданы записи
+     * с нулевыми или отрицательными шансами - удаляем ненужные строки и работаем с остатком
+     */
     private void typesListVerify(){
         Iterator<Map.Entry<String, Integer>> iterator = raffleToyTypesList.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Integer> pair = iterator.next();
             Integer chance = pair.getValue();
             if (chance < 1) {
-
                 iterator.remove();
             }
         }
@@ -171,9 +172,9 @@ public class ToyShop {
     }
 
     /**
-     * Выдаём призы победителям:
-     * если список призов наполнен - выдаём первый по очереди и удаляем его POLL
-     * иначе - сообщение и запись в лог
+     * Выдаём призы победителям:<br>
+     * Если список призов наполнен - выдаём первый по очереди и удаляем его POLL,<br>
+     * иначе - сообщение и запись в лог.
      */
     public void giveOutPrize() { // выдать выигранную игрушку
         if (!prizesQueue.isEmpty()) {
